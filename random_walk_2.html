@@ -1,0 +1,151 @@
+<html>
+    <head>
+        <title>Random Walks Scroll</title>
+        <link href='http://fonts.googleapis.com/css?family=Gravitas+One' rel='stylesheet' type='text/css'>
+        <script src="http://code.jquery.com/jquery-latest.js"></script>
+        <script>
+
+            function new_point(posX,posY,time){
+                $("#container").append('<div class="dot" id="i'+time+'"></div>');
+                $(".dot").eq(time).css("top",posY+"px");
+                $(".dot").eq(time).css("left",posX+"px");
+            }
+
+            function pausecomp(ms) {
+                ms += new Date().getTime();
+                while (new Date() < ms){}
+            }
+
+            $(document).ready(function(){
+
+                var time = 0;
+                var posX = 250;
+                var posY = 500;
+                var newY = 0;
+                var newX = 0;
+                var incr = 5;
+                var r_dot = 0;
+
+                //$("#container").mousemove(function(){
+                $(document).scroll(function(){
+                    var scrollTop = 2*$(document).scrollTop();
+                    $("#ghost").css("margin-top",scrollTop+"px");
+                    var decision = Math.random();
+                    /*
+                    if(decision < 0.25){
+                        newX = 0*incr;
+                        newY = 1*incr;
+                    }else if(decision > 0.25 && decision < 0.5){
+                        newX = 0*incr;
+                        newY = -1*incr;
+                    }else if(decision > 0.5 && decision < 0.75){
+                        newX = 1*incr;
+                        newY = 0*incr;
+                    }else if(decision > 0.75){
+                        newX = -1*incr;
+                        newY = 0*incr;
+                    }
+                    */
+                    if(decision < 0.333){
+                        newX = 1*incr;
+                    }else if(decision >= 0.333 && decision < 0.666){
+                        newX = -1*incr;
+                    }else if(decision >= 0.666){
+                        newX = 0;
+                    }
+
+                    //newY = incr;
+
+                    posX = posX + newX;
+
+
+                    for(k = 0; k < time; k++){
+                        var start = parseInt($(".dot").eq(k).css("top"));
+                        $(".dot").eq(k).css("top",start-incr+"px");
+                        //if(parseInt($(".dot").eq(k).css("top")) < 0){
+                        //    $(".dot").eq(k).remove();
+                        //}
+                    }
+
+                    var r = 180+Math.round(75*((Math.abs(posX-250)/100)));
+                    $("#container").css("background-color","rgb("+r+",130,130)");
+
+                    new_point(posX,posY,time);
+
+                    time = time + 1;
+
+                    //$("#i"+(time-100)).remove();
+
+                    //$("#container").append('<div class="dot"></div>');
+                    //$(".dot").eq(time).css("top",posY+"px");
+                    //$(".dot").eq(time).css("left",posX+"px");
+                    //setTimeout(new_point(posX,posY,time),1);
+                    //pausecomp(100);
+
+                });
+            });
+
+        </script>
+        <style>
+            *{
+                margin: 0;
+                padding: 0;
+            }
+            body{
+                background-color: white;
+                height: 100%;
+                width: 100%;
+            }
+            #ghost{
+                width: 100px;
+                height: 10000px;
+                vertical-align: middle;
+                position: absolute;
+                padding-top: 0px;
+                top: 0px;
+                left: 0px;
+                background-color: rgba(0,0,0,0);
+                z-index: 2;
+            }
+            #container{
+                background-color: rgb(180,130,130);
+                width: 500px;
+                height: 100%;
+                position: fixed;
+                display: inline-block;
+                z-index: 1;
+            }
+            .dot{
+                width: 3px;
+                height: 3px;
+                background-color: black;
+                position: absolute;
+            }
+            img{
+                position: fixed;
+                top: 100px;
+                left: 600px;
+            }
+            img:hover{
+                cursor: pointer;
+            }
+            #text{
+                font-family: 'Gravitas One', cursive;
+                position: fixed;
+                left: 600px;
+                top: 15px;
+                width: 500px;
+                text-align: center;
+                font-size: 50px;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="ghost"></div>
+        <div id="ghost"></div>
+        <div id="container">
+        </div>
+
+    </body>
+</html>
